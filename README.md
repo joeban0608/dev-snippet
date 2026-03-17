@@ -42,6 +42,7 @@ Or use the Makefile helpers:
 ```bash
 make help
 make start
+make stop
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -71,6 +72,8 @@ pnpm db:generate
 pnpm db:migrate
 pnpm db:studio
 ```
+
+`make stop` will stop the app process, stop Drizzle Studio, and run `docker compose down -v`.
 
 ## Current Scope
 

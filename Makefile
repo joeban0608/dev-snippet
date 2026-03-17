@@ -1,7 +1,10 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
+PID_DIR := .make
+APP_PID_FILE := $(PID_DIR)/app.pid
+STUDIO_PID_FILE := $(PID_DIR)/studio.pid
 
-.PHONY: help ensure-env install db-up db-wait db-down db-reset db-generate db-migrate db-studio dev lint build start stop
+.PHONY: help ensure-env install db-up db-wait db-down db-reset db-generate db-migrate db-studio dev lint build start stop stop-services clean-pids
 
 help: ## Show available make targets
 	@awk 'BEGIN {FS = ":.*## "; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z0-9_.-]+:.*## / { printf "  \033[36m%-14s\033[0m %s\n", $$1, $$2 }' $(MAKEFILE_LIST)
@@ -48,12 +51,30 @@ build: ## Run a production build with webpack
 	pnpm exec next build --webpack
 
 start: ensure-env db-up db-wait db-migrate ## Start DB, Drizzle Studio, and the Next.js app
+	@mkdir -p $(PID_DIR)
+	@if [ -f $(APP_PID_FILE) ] || [ -f $(STUDIO_PID_FILE) ]; then \
+		echo "Existing PID files found. Run 'make stop' first if the stack is already running."; \
+		exit 1; \
+	fi
 	@echo "App:    http://localhost:3000"
 	@echo "Studio: https://local.drizzle.studio or the URL printed by drizzle-kit"
-	@trap 'trap - INT TERM EXIT; kill 0' INT TERM EXIT; \
-		pnpm db:studio & \
-		pnpm dev & \
-		wait
+	@trap '$(MAKE) stop-services' INT TERM EXIT; \
+		pnpm db:studio > $(PID_DIR)/studio.log 2>&1 & echo $$! > $(STUDIO_PID_FILE); \
+		pnpm dev > $(PID_DIR)/app.log 2>&1 & echo $$! > $(APP_PID_FILE); \
+		wait $$(cat $(STUDIO_PID_FILE)) $$(cat $(APP_PID_FILE))
 
-stop: ## Stop docker services started for local development
-	docker compose down
+stop-services: ## Stop app and studio processes recorded by make start
+	@if [ -f $(APP_PID_FILE) ]; then \
+		kill $$(cat $(APP_PID_FILE)) >/dev/null 2>&1 || true; \
+		rm -f $(APP_PID_FILE); \
+	fi
+	@if [ -f $(STUDIO_PID_FILE) ]; then \
+		kill $$(cat $(STUDIO_PID_FILE)) >/dev/null 2>&1 || true; \
+		rm -f $(STUDIO_PID_FILE); \
+	fi
+
+clean-pids: ## Remove stale PID files
+	rm -f $(APP_PID_FILE) $(STUDIO_PID_FILE)
+
+stop: stop-services ## Stop app, Drizzle Studio, and remove local Docker data
+	docker compose down -v
