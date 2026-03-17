@@ -1,5 +1,5 @@
 {
-  "id": "db4a647c-09b8-46a1-857d-8e0e2721ae5a",
+  "id": "2b292fb5-0f9e-4cf1-bf1c-7fe9115b6d3d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -46,7 +46,7 @@
         },
         "expires_at": {
           "name": "expires_at",
-          "type": "timestamp",
+          "type": "integer",
           "primaryKey": false,
           "notNull": false
         },

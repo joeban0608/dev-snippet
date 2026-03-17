@@ -5,15 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1773735527351,
-      "tag": "0000_dashing_squadron_supreme",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1773735560257,
-      "tag": "0001_marvelous_angel",
+      "when": 1773738474321,
+      "tag": "0000_init",
       "breakpoints": true
     }
   ]
