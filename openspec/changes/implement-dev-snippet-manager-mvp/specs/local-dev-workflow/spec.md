@@ -27,3 +27,14 @@
 #### Scenario: 開發者執行 make stop
 - **WHEN** 開發者執行 `make stop`
 - **THEN** 系統會停止已追蹤的本機程序，並執行 `docker compose down -v`
+
+### Requirement: 專案需保留 Vercel + Supabase 的部署接縫
+系統 SHALL 以環境變數而非額外資料存取抽象來處理 Vercel 與 Supabase 的部署差異。
+
+#### Scenario: 應用程式在正式環境執行
+- **WHEN** 應用程式部署到 Vercel
+- **THEN** 系統使用 `DATABASE_URL` 作為 runtime 連線字串，而不要求改寫 domain code 來適配資料庫供應商
+
+#### Scenario: 開發者執行 migration 或管理資料庫
+- **WHEN** 開發者在 Supabase 環境中執行 Drizzle migration 或 Studio
+- **THEN** 系統優先使用 `DIRECT_DATABASE_URL`，若未提供則退回 `DATABASE_URL`

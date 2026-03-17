@@ -19,3 +19,9 @@
 - [x] 3.3 修正 `account.expires_at` migration cast 問題，讓既有 migration 可重跑
 - [ ] 3.4 以真實 GitHub OAuth credentials 完整驗證一次本機登入與 CRUD 流程
 - [ ] 3.5 決定 archive 前是否要將目前 migration history 壓成單一乾淨 baseline
+
+## 4. 部署接縫與 production 準備
+
+- [x] 4.1 補 `DATABASE_URL` / `DIRECT_DATABASE_URL` 的 env 策略，避免為部署額外加入資料層抽象
+- [x] 4.2 補 README 中 Vercel + Supabase 的部署說明與環境變數配置
+- [ ] 4.3 以 Supabase connection string 實際跑一次 migration 與 production smoke check

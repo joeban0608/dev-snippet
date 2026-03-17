@@ -8,6 +8,7 @@
 - 把目前這版 MVP 架構保存成後續演進的 baseline contract。
 - 讓 auth、authorization、validation 與 persistence 邏輯維持 server-first 且責任清楚。
 - 定義 App Router 頁面、shared libraries 與 local development tooling 的責任分界。
+- 讓未來部署到 Vercel + Supabase 時，只需要調整 env 與部署流程，而不需要重寫 domain abstraction。
 - 記錄在此 change 完成前仍需要補強的項目。
 
 **Non-Goals:**
@@ -44,12 +45,19 @@
 - Drizzle migrations 直接納入版本控制。
 - Make targets 包裝常見生命週期：啟動 DB、等待 ready、套 migration、啟動 Studio、啟動 app，以及完整停止整套本地流程。
 
+### 以 env 接縫處理部署差異，而不是加入額外資料層抽象
+- app runtime 持續只依賴 PostgreSQL 與 Drizzle，不引入額外的 provider-specific repository layer。
+- `DATABASE_URL` 作為 app runtime 連線字串。
+- `DIRECT_DATABASE_URL` 作為 Drizzle migration / Studio 優先使用的直接連線字串；若未提供則退回 `DATABASE_URL`。
+- 這樣未來切到 Vercel + Supabase 時，主要變動留在 env 與部署流程，而不是 domain code。
+
 ## Risks / Trade-offs
 
 - [Auth.js v5 beta 仍有版本面風險] → Mitigation: 把 auth wiring 集中在 `lib/auth/*`，並在 archive 前以真實 GitHub OAuth credentials 驗證一次。
 - [Migration 歷史已包含一個修正型 follow-up migration] → Mitigation: 先保留目前已修正版本，之後再決定 archive 前是否要 squash 成乾淨 baseline。
 - [auth / ownership 路徑目前沒有自動化測試] → Mitigation: 把測試補齊列成明確剩餘任務，避免誤判 MVP 已完成。
 - [local workflow 依賴 Docker 與環境變數] → Mitigation: 持續讓 `.env.example`、`README.md` 與 `Makefile` 保持一致，降低 setup 偏差。
+- [部署環境可能同時存在 pooler 與 direct DB URL] → Mitigation: 將 runtime 與 migration 連線透過 `DATABASE_URL` / `DIRECT_DATABASE_URL` 分離，避免把 provider 差異散落進業務邏輯。
 
 ## Migration Plan
 
@@ -58,6 +66,7 @@
 3. 套用已納入 repo 的 Drizzle migrations。
 4. 透過 `make start` 或對應手動指令啟動 Drizzle Studio 與 Next.js app。
 5. 在繼續做下一步功能之前，先驗證 GitHub login、dashboard protection、snippet CRUD，以及 owner-only access。
+6. 部署到 Vercel + Supabase 時，將 runtime URL 與 direct migration URL 依 env 分開配置。
 
 這個階段的 rollback 相對單純：停止本機 stack 並移除 Docker volume 即可，因為目前 workflow 主要還是針對本地 MVP 開發，不是 production deployment。
 
@@ -66,3 +75,4 @@
 - 在 archive 之前，是否要先把 migration history squash 成單一乾淨 baseline？
 - 在 MVP 視為完成前，最少需要補到什麼程度的自動化測試：integration-only，還是一條最小 end-to-end flow？
 - 後續若擴充功能，snippet viewing 與 editing 是否要拆頁，還是暫時保留單頁編輯模型？
+- 實際部署到 Supabase 時，是否要保留 Drizzle Studio 只用於本機與 admin 流程，而不作為正式運維工具？

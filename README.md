@@ -56,7 +56,17 @@ AUTH_SECRET=
 AUTH_GITHUB_ID=
 AUTH_GITHUB_SECRET=
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/dev_snippet
+DIRECT_DATABASE_URL=
 ```
+
+Notes:
+
+- `DATABASE_URL` is the runtime connection string used by the app.
+- `DIRECT_DATABASE_URL` is optional and is used by Drizzle tooling when you want migrations or Studio to connect through a direct database URL instead of the runtime URL.
+- For local development, using only `DATABASE_URL` is fine.
+- For Vercel + Supabase, prefer:
+  - `DATABASE_URL` = Supabase pooler / transaction connection string for the deployed app
+  - `DIRECT_DATABASE_URL` = Supabase direct Postgres connection string for Drizzle migrations and admin tooling
 
 ## Useful Commands
 
@@ -74,6 +84,39 @@ pnpm db:studio
 ```
 
 `make stop` will stop the app process, stop Drizzle Studio, and run `docker compose down -v`.
+
+## Deployment Notes
+
+Target deployment:
+
+- App: Vercel
+- Database: Supabase Postgres
+
+Recommended production setup:
+
+1. Keep the application code Postgres-provider agnostic.
+2. Use `DATABASE_URL` for the Vercel runtime connection.
+3. Use `DIRECT_DATABASE_URL` for Drizzle migrations if the provider offers a separate direct connection.
+4. Keep `prepare: false` in the Postgres client for compatibility with pooled/serverless connection patterns.
+5. Continue treating Auth.js, Zod validation, and ownership checks as server-side concerns.
+
+Suggested Vercel environment variables:
+
+```bash
+AUTH_SECRET=
+AUTH_GITHUB_ID=
+AUTH_GITHUB_SECRET=
+DATABASE_URL=<supabase-pooler-url>
+DIRECT_DATABASE_URL=<supabase-direct-url>
+```
+
+Suggested deploy flow:
+
+1. Create the Supabase project and obtain both connection strings.
+2. Set the Vercel environment variables.
+3. Run Drizzle migrations against `DIRECT_DATABASE_URL`.
+4. Deploy the app to Vercel.
+5. Verify GitHub login, protected dashboard access, snippet CRUD, and ownership behavior in production.
 
 ## Current Scope
 
