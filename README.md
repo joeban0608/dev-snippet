@@ -43,6 +43,7 @@ Or use the Makefile helpers:
 make help
 make start
 make stop
+ENV_FILE=.env.production make db-migrate
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -76,6 +77,8 @@ make start
 make stop
 make db-migrate
 make db-studio
+ENV_FILE=.env.production make db-migrate
+ENV_FILE=.env.production make db-studio
 pnpm lint
 pnpm build
 pnpm db:generate
@@ -84,6 +87,13 @@ pnpm db:studio
 ```
 
 `make stop` will stop the app process, stop Drizzle Studio, and run `docker compose down -v`.
+
+Makefile env behavior:
+
+- Default: `make <target>` uses `.env`
+- Override: `ENV_FILE=.env.production make <target>` uses `.env.production`
+- When `ENV_FILE=.env`, DB targets will bootstrap the local Docker PostgreSQL service
+- When `ENV_FILE` is a non-local file such as `.env.production`, DB targets skip local Docker startup and use the connection string from that env file
 
 ## Deployment Notes
 
