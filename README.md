@@ -37,6 +37,13 @@ pnpm db:migrate
 pnpm dev
 ```
 
+Or use the Makefile helpers:
+
+```bash
+make help
+make start
+```
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Environment Variables
@@ -53,6 +60,11 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/dev_snippet
 ## Useful Commands
 
 ```bash
+make help
+make start
+make stop
+make db-migrate
+make db-studio
 pnpm lint
 pnpm build
 pnpm db:generate
