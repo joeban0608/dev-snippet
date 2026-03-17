@@ -13,6 +13,6 @@ export default defineConfig({
       getFirstNonEmpty(
         process.env.DIRECT_DATABASE_URL,
         process.env.DATABASE_URL,
-      ) ?? "postgres://postgres:postgres@localhost:5432/dev_snippet",
+      ) ?? "postgres://postgres:postgres@localhost:5432/local",
   },
 });

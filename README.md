@@ -56,7 +56,7 @@ Required values:
 AUTH_SECRET=
 AUTH_GITHUB_ID=
 AUTH_GITHUB_SECRET=
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/dev_snippet
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/local
 DIRECT_DATABASE_URL=
 ```
 

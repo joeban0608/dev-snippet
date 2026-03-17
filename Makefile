@@ -22,7 +22,7 @@ db-up: ## Start the local PostgreSQL container
 	docker compose up -d postgres
 
 db-wait: ## Wait until PostgreSQL is ready to accept connections
-	@until docker compose exec -T postgres pg_isready -U postgres -d dev_snippet >/dev/null 2>&1; do \
+	@until docker compose exec -T postgres pg_isready -U postgres -d local >/dev/null 2>&1; do \
 		echo "Waiting for PostgreSQL..."; \
 		sleep 1; \
 	done
