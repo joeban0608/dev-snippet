@@ -23,10 +23,14 @@ export const authConfig = {
     GitHub({
       clientId: authEnv.AUTH_GITHUB_ID,
       clientSecret: authEnv.AUTH_GITHUB_SECRET,
+      // Allow trusted providers to converge on the same user when email matches.
+      allowDangerousEmailAccountLinking: true,
     }),
     Google({
       clientId: authEnv.AUTH_GOOGLE_ID,
       clientSecret: authEnv.AUTH_GOOGLE_SECRET,
+      // Allow trusted providers to converge on the same user when email matches.
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   pages: {

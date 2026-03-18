@@ -112,6 +112,11 @@ Recommended production setup:
 4. Keep `prepare: false` in the Postgres client for compatibility with pooled/serverless connection patterns.
 5. Continue treating Auth.js, Zod validation, and ownership checks as server-side concerns.
 
+Auth behavior:
+
+- GitHub and Google accounts with the same email are linked to the same app user.
+- Existing production test data that was created before this policy change may still need manual cleanup.
+
 Suggested Vercel environment variables:
 
 ```bash
