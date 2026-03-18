@@ -69,8 +69,8 @@ export const sessions = pgTable(
 );
 
 // Used by the Auth.js adapter for email-based sign-in / verification flows.
-// This project currently uses GitHub OAuth only, so the table may remain empty
-// unless an email provider or magic-link flow is added later.
+// This project currently uses OAuth providers only, so the table may remain
+// empty unless an email provider or magic-link flow is added later.
 export const verificationTokens = pgTable(
   "verification_token",
   {

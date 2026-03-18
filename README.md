@@ -2,7 +2,7 @@
 
 A small App Router side project for practicing:
 
-- GitHub OAuth with Auth.js v5
+- GitHub + Google OAuth with Auth.js v5
 - database-backed session management
 - protected routes
 - server-side authorization
@@ -56,6 +56,8 @@ Required values:
 AUTH_SECRET=
 AUTH_GITHUB_ID=
 AUTH_GITHUB_SECRET=
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
 DATABASE_URL=postgres://postgres:postgres@localhost:5432/local
 DIRECT_DATABASE_URL=
 ```
@@ -116,6 +118,8 @@ Suggested Vercel environment variables:
 AUTH_SECRET=
 AUTH_GITHUB_ID=
 AUTH_GITHUB_SECRET=
+AUTH_GOOGLE_ID=
+AUTH_GOOGLE_SECRET=
 DATABASE_URL=<supabase-pooler-url>
 DIRECT_DATABASE_URL=<supabase-direct-url>
 ```
@@ -126,13 +130,13 @@ Suggested deploy flow:
 2. Set the Vercel environment variables.
 3. Run Drizzle migrations against `DIRECT_DATABASE_URL`.
 4. Deploy the app to Vercel.
-5. Verify GitHub login, protected dashboard access, snippet CRUD, and ownership behavior in production.
+5. Verify GitHub and Google login, protected dashboard access, snippet CRUD, and ownership behavior in production.
 
 ## Current Scope
 
 Included in MVP:
 
-- GitHub login/logout
+- GitHub and Google login/logout
 - protected dashboard
 - user-owned snippets
 - create, edit, delete flows

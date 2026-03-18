@@ -1,5 +1,6 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 import type { NextAuthConfig } from "next-auth";
 
 import { db } from "@/lib/db";
@@ -22,6 +23,10 @@ export const authConfig = {
     GitHub({
       clientId: authEnv.AUTH_GITHUB_ID,
       clientSecret: authEnv.AUTH_GITHUB_SECRET,
+    }),
+    Google({
+      clientId: authEnv.AUTH_GOOGLE_ID,
+      clientSecret: authEnv.AUTH_GOOGLE_SECRET,
     }),
   ],
   pages: {

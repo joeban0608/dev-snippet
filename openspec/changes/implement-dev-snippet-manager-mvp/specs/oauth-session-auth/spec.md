@@ -1,11 +1,11 @@
 ## ADDED Requirements
 
-### Requirement: 使用者可以透過 GitHub OAuth 驗證
-系統 SHALL 在公開頁面提供 GitHub sign-in 入口，並使用設定好的 GitHub provider 與 Auth.js 建立 authenticated session。
+### Requirement: 使用者可以透過 GitHub 或 Google OAuth 驗證
+系統 SHALL 在公開頁面提供 GitHub 與 Google sign-in 入口，並使用設定好的 provider 與 Auth.js 建立 authenticated session。
 
 #### Scenario: 未登入使用者從公開頁面登入
-- **WHEN** 未登入使用者在 `/` 或 `/login` 提交 GitHub sign-in action
-- **THEN** 系統會啟動 GitHub OAuth flow，並在成功後把使用者導向 authenticated application
+- **WHEN** 未登入使用者在 `/` 或 `/login` 提交 GitHub 或 Google sign-in action
+- **THEN** 系統會啟動對應的 OAuth flow，並在成功後把使用者導向 authenticated application
 
 ### Requirement: 受保護的應用路由需要有效 session
 系統 SHALL 在渲染受保護的 dashboard routes 之前執行 server-side session 檢查。

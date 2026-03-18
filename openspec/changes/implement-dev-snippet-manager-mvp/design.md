@@ -14,7 +14,7 @@
 **Non-Goals:**
 - 不納入 tags、search、admin roles、sharing、public/private visibility。
 - 不額外加入超過目前 `lib/*` domain split 的 repository / service abstraction。
-- 不在 MVP 階段擴充成 GitHub 以外的 auth provider 策略。
+- 不在目前階段擴充成超過 GitHub 與 Google 以外的 auth provider 策略。
 - 不把 Drizzle Studio 或本機 Docker workflow 改成 hosted database workflow。
 
 ## Decisions
@@ -53,7 +53,7 @@
 
 ## Risks / Trade-offs
 
-- [Auth.js v5 beta 仍有版本面風險] → Mitigation: 把 auth wiring 集中在 `lib/auth/*`，並在 archive 前以真實 GitHub OAuth credentials 驗證一次。
+- [Auth.js v5 beta 仍有版本面風險] → Mitigation: 把 auth wiring 集中在 `lib/auth/*`，並在 archive 前以真實 GitHub / Google OAuth credentials 驗證一次。
 - [Migration 歷史已包含一個修正型 follow-up migration] → Mitigation: 先保留目前已修正版本，之後再決定 archive 前是否要 squash 成乾淨 baseline。
 - [auth / ownership 路徑目前沒有自動化測試] → Mitigation: 把測試補齊列成明確剩餘任務，避免誤判 MVP 已完成。
 - [local workflow 依賴 Docker 與環境變數] → Mitigation: 持續讓 `.env.example`、`README.md` 與 `Makefile` 保持一致，降低 setup 偏差。
@@ -61,11 +61,11 @@
 
 ## Migration Plan
 
-1. 複製 `.env.example` 為 `.env`，填入 GitHub OAuth credentials 與 `DATABASE_URL`。
+1. 複製 `.env.example` 為 `.env`，填入 GitHub / Google OAuth credentials 與 `DATABASE_URL`。
 2. 用 Docker Compose 啟動本機 PostgreSQL。
 3. 套用已納入 repo 的 Drizzle migrations。
 4. 透過 `make start` 或對應手動指令啟動 Drizzle Studio 與 Next.js app。
-5. 在繼續做下一步功能之前，先驗證 GitHub login、dashboard protection、snippet CRUD，以及 owner-only access。
+5. 在繼續做下一步功能之前，先驗證 GitHub / Google login、dashboard protection、snippet CRUD，以及 owner-only access。
 6. 部署到 Vercel + Supabase 時，將 runtime URL 與 direct migration URL 依 env 分開配置。
 
 這個階段的 rollback 相對單純：停止本機 stack 並移除 Docker volume 即可，因為目前 workflow 主要還是針對本地 MVP 開發，不是 production deployment。

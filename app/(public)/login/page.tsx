@@ -24,16 +24,25 @@ export default async function LoginPage() {
               Sign in
             </p>
             <h1 className="text-4xl font-semibold tracking-tight">
-              Continue with GitHub to manage your snippets.
+              Continue with GitHub or Google to manage your snippets.
             </h1>
             <p className="muted text-base leading-7">
-              This MVP only supports GitHub OAuth. Session and ownership checks
-              are enforced on the server.
+              This MVP supports GitHub and Google OAuth. Session and ownership
+              checks are enforced on the server.
             </p>
           </div>
 
-          <div className="mt-10">
-            <SignInButton className="button-primary w-full" />
+          <div className="mt-10 space-y-3">
+            <SignInButton
+              className="button-primary w-full"
+              label="Continue with GitHub"
+              provider="github"
+            />
+            <SignInButton
+              className="button-secondary w-full"
+              label="Continue with Google"
+              provider="google"
+            />
           </div>
         </div>
       </div>

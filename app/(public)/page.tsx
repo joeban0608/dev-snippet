@@ -33,7 +33,16 @@ export default async function LandingPage() {
                 <Link className="button-secondary" href="/login">
                   View login
                 </Link>
-                <SignInButton className="button-primary" />
+                <SignInButton
+                  className="button-primary"
+                  label="GitHub"
+                  provider="github"
+                />
+                <SignInButton
+                  className="button-secondary"
+                  label="Google"
+                  provider="google"
+                />
               </div>
             </header>
 
@@ -44,7 +53,7 @@ export default async function LandingPage() {
                 </p>
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
                   {[
-                    "GitHub OAuth with Auth.js v5",
+                    "GitHub + Google OAuth with Auth.js v5",
                     "Database-backed sessions",
                     "Protected App Router routes",
                     "Server-side ownership enforcement",
@@ -66,7 +75,7 @@ export default async function LandingPage() {
                   MVP focus
                 </p>
                 <ul className="mt-5 space-y-3 text-sm leading-7 text-[#eadbcf]">
-                  <li>GitHub login/logout</li>
+                  <li>GitHub and Google login/logout</li>
                   <li>Protected dashboard</li>
                   <li>User-owned snippet CRUD</li>
                   <li>No tags, search, admin, or sharing yet</li>

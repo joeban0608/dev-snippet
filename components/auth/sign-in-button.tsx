@@ -1,20 +1,26 @@
 import { signIn } from "@/lib/auth/auth";
 
 type SignInButtonProps = {
+  provider: "github" | "google";
+  label?: string;
   className?: string;
 };
 
-export function SignInButton({ className }: SignInButtonProps) {
+export function SignInButton({
+  provider,
+  label,
+  className,
+}: SignInButtonProps) {
   return (
     <form
       action={async () => {
         "use server";
 
-        await signIn("github", { redirectTo: "/dashboard" });
+        await signIn(provider, { redirectTo: "/dashboard" });
       }}
     >
       <button className={className ?? "button-primary"} type="submit">
-        Continue with GitHub
+        {label ?? `Continue with ${provider === "github" ? "GitHub" : "Google"}`}
       </button>
     </form>
   );
